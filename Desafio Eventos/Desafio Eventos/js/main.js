@@ -2,8 +2,6 @@
 
 const pedidototal=[];
 
-
-
 //Boton Comida
 let opcion= document.getElementById("Opciones");
 
@@ -47,7 +45,7 @@ function RenderizarComida(){
                     <h5 class="card-title">${p.nombre}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>${p.precio}$</p>
-                    <button class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
+                    <button id="btn-click" class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
                 </div>
             </div>
             </div>
@@ -82,7 +80,7 @@ function RenderizarBebida(){
                     <h5 class="card-title">${p.nombre}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>${p.precio}$</p>
-                    <button class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
+                    <button id="btn-click" class="btn btn-primary"  onclick="SumarPedido(${p.id})">Añadir al pedido</button>
                 </div>
             </div>
             </div>
@@ -115,7 +113,7 @@ function RenderizarPostre(){
                     <h5 class="card-title">${p.nombre}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>${p.precio}$</p>
-                    <button class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
+                    <button id="btn-click" class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
                 </div>
             </div>
             </div>
@@ -153,11 +151,11 @@ function RenderizaPedido(){
     GuardarPedido();
 }
 
+
 //Suma y resta del pedido
 
-
 function SumarPedido(id){
-    
+
     let pedidos = BBDD.find(pedidos => pedidos.id === id);
     let ListaPedidos = pedidototal.find(pedidos => pedidos.id === id);
         if(ListaPedidos){
@@ -172,6 +170,34 @@ function SumarPedido(id){
     CalcularPrecioFinal();
 
 }
+
+
+
+const agregar= document.getElementById('tienda')
+agregar.addEventListener('click',()=>{
+    Toastify({
+        text: 'agregaste un pedido',
+        duration: 1000,
+    }).showToast();
+})
+
+
+const quitar= document.getElementById('pedido')
+    quitar.addEventListener('click',()=>{
+        Toastify({
+            text: 'quitaste un pedido',
+            duration: 1000,
+        }).showToast();
+    })
+
+const finalizar=document.getElementById('finalizarPedido')
+    finalizar.addEventListener('click',()=>{
+        Swal.fire(
+            'Good job!',
+            'You clicked the button!',
+            'success'
+        )
+    })
 
 //Guarda el pedido en el storage
 function GuardarPedido(){
