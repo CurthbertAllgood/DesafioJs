@@ -1,32 +1,35 @@
 
 
+fetch("/js/stock.json")
+    .then((response)=> response.json()
+    .then((data)=> BBDD=data));
+
 const pedidototal=[];
 
 //Boton Comida
 let opcion= document.getElementById("Opciones");
 
 
-opcion.onclick= () =>{renderizarComida();
+opcion.onclick= () =>{RenderizarComida();
 }
 //Boton Bebidas
 let opcion1= document.getElementById("Opciones2");
 
 
-opcion1.onclick= () =>{renderizarBebida();
+opcion1.onclick= () =>{RenderizarBebida();
 }
 //Boton Postre
-let opcion2= document.getElementById("Opciones3");
+let opcion3= document.getElementById("Opciones3");
 
 
-opcion2.onclick= () =>{renderizarPostre();
+opcion3.onclick= () =>{RenderizarPostre();
 }
-
 
 
 
 
 //Renderiza el menu solo comida
-function renderizarComida(){
+function RenderizarComida(){
 
     const tienda = document.getElementById('tienda');
     
@@ -46,7 +49,7 @@ function renderizarComida(){
                     <h5 class="card-title">${p.nombre}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>${p.precio}$</p>
-                    <button class="btn btn-primary" onclick="SumarProducto(${p.id})">Añadir al pedido</button>
+                    <button id="btn-click" class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
                 </div>
             </div>
             </div>
@@ -54,10 +57,11 @@ function renderizarComida(){
             
             tienda.innerHTML += productoHTML;
         });
+
 }
 
 //Renderiza el menu solo bebidas
-function renderizarBebida(){
+function RenderizarBebida(){
 
     
     const tienda = document.getElementById('tienda');
@@ -80,7 +84,7 @@ function renderizarBebida(){
                     <h5 class="card-title">${p.nombre}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>${p.precio}$</p>
-                    <button class="btn btn-primary" onclick="SumarProducto(${p.id})">Añadir al pedido</button>
+                    <button id="btn-click" class="btn btn-primary"  onclick="SumarPedido(${p.id})">Añadir al pedido</button>
                 </div>
             </div>
             </div>
@@ -91,7 +95,7 @@ function renderizarBebida(){
 }
 
 //Renderiza el menu solo postre
-function renderizarPostre(){
+function RenderizarPostre(){
 
 
     const tienda = document.getElementById('tienda');
@@ -113,7 +117,7 @@ function renderizarPostre(){
                     <h5 class="card-title">${p.nombre}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>${p.precio}$</p>
-                    <button class="btn btn-primary" onclick="SumarProducto(${p.id})">Añadir al pedido</button>
+                    <button id="btn-click" class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
                 </div>
             </div>
             </div>
@@ -122,29 +126,122 @@ function renderizarPostre(){
             tienda.innerHTML += productoHTML;
         });
 }
+//Suma productos al pedido de la mesa
 
-function SumarProducto(id){
+function RenderizaPedido(){
+    let pedido = document.querySelector('#pedido');    
+    let pedidoHtml =' ';
+
+        pedidototal.forEach((p, id)=>{
+            
+            pedidoHtml += `
+    
+            <div class="col-12 col-md-4 mb-5 d-flex justify-content-center">
+            <div class="card text-dark" style="width: 18rem;">
+                <img class="card-img-top" src="${p.img}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">${p.nombre}</h5>
+                    <p>${p.precio}$</p>
+                    <p>Cantidad: ${p.cantidad}</p>
+                    <button class="btn btn-danger" onclick="RestarPedido(${id})">Eliminar</button>
+                </div>
+            </div>
+            </div>
+            `
+            
+            
+    })
+    pedido.innerHTML = pedidoHtml;
+    GuardarPedido();
+}
+
+
+//Suma y resta del pedido
+
+function SumarPedido(id){
 
     let pedidos = BBDD.find(pedidos => pedidos.id === id);
     let ListaPedidos = pedidototal.find(pedidos => pedidos.id === id);
         if(ListaPedidos){
             ListaPedidos.cantidad++;
-            alert("¡producto "+pedidos.nombre+" agregado!");
         }
         else {
         pedidos.cantidad = 1;
         pedidototal.push(pedidos);
-        alert("¡producto "+pedidos.nombre+" agregado!");
         console.log(pedidototal);
         }
+    RenderizaPedido();
     CalcularPrecioFinal();
 
 }
 
+
+
+const agregar= document.getElementById('tienda')
+agregar.addEventListener('click',()=>{
+    Toastify({
+        text: 'agregaste un pedido',
+        duration: 1000,
+    }).showToast();
+})
+
+
+const quitar= document.getElementById('pedido')
+    quitar.addEventListener('click',()=>{
+        Toastify({
+            text: 'quitaste un pedido',
+            duration: 1000,
+        }).showToast();
+    })
+
+const finalizar=document.getElementById('finalizarPedido')
+    finalizar.addEventListener('click',()=>{
+        Swal.fire(
+            'Good job!',
+            'You clicked the button!',
+            'success'
+        )
+    })
+
+//Guarda el pedido en el storage
+function GuardarPedido(){
+    for(pedido of pedidototal){
+        GuardarStorage(pedido.nombre , JSON.stringify(pedido))
+    }
+};
+
+const GuardarStorage= (clave, valor) =>{
+    localStorage.setItem(clave,valor);
+}
+
+//borra el storage 
+
+function BorrarStorage(){
+    localStorage.clear();
+}
+
+//Elimina elemento del pedido y actualiza el storage
+
+function RestarPedido(id){
+    BorrarStorage();
+    pedidototal[id].cantidad--;
+        if(pedidototal[id].cantidad===0){
+        pedidototal.splice(id,1);
+    }
+    GuardarPedido();
+    RenderizaPedido();
+    CalcularPrecioFinal();
+
+}
+//Calcula precio final
+
 function CalcularPrecioFinal(){
+    
     let acu=0;
     pedidototal.forEach((p)=>{
         acu += p.precio * p.cantidad;
     });
     console.log("Precio final $"+acu);
+    const t = document.getElementById('total');
+    t.innerHTML = `<h5>El total del pedido es: $${acu}</h5>`;
 }
