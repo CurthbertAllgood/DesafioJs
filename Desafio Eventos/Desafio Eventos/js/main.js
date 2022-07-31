@@ -1,54 +1,53 @@
 
-
 const pedidototal=[];
+
+window.addEventListener("DOMContentLoaded",()=>{
+    if(localStorage.getItem('pedido')){
+        pedidototal=JSON.parse(localStorage.getItem('pedido'));
+        RenderizaPedido();
+    }
+});
+
+
+fetch("/js/stock.json")
+    .then((response)=> response.json()
+    .then((data)=> BBDD=data));
+
 
 //Boton Comida
 let opcion= document.getElementById("Opciones");
-
-
-opcion.onclick= () =>{RenderizarComida();
-}
+    opcion.onclick= () =>{RenderizarComida();}
 //Boton Bebidas
 let opcion1= document.getElementById("Opciones2");
-
-
-opcion1.onclick= () =>{RenderizarBebida();
-}
+    opcion1.onclick= () =>{RenderizarBebida();}
 //Boton Postre
-let opcion3= document.getElementById("Opciones3");
-
-
-opcion3.onclick= () =>{RenderizarPostre();
-}
-
-
-
+let opcion2= document.getElementById("Opciones3");
+    opcion2.onclick= () =>{RenderizarPostre();}
 
 //Renderiza el menu solo comida
 function RenderizarComida(){
-
     const tienda = document.getElementById('tienda');
-    
+    //Limpia el menu
     tienda.innerHTML = '';
     let value=BBDD.filter(function(tipo){
         return (tipo.codigo==='C');
     });
-
+    tienda.innerHTML='<h1>Menu de Comida</h1>';
         value.forEach((p)=>{
-            
+    //renderiza el menu de comida
             let productoHTML = `
-    
             <div class="col-12 col-md-4 mb-5 d-flex justify-content-center">
             <div class="card text-dark" style="width: 18rem;">
-            <img class="card-img-top" src="${p.img}" alt="Imagen Comida">
+            <img class="imagen" src="${p.img}" alt="Imagen Comida">
                 <div class="card-body">
                     <h5 class="card-title">${p.nombre}</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p class="card-text">${p.descripcion}</p>
                     <p>${p.precio}$</p>
                     <button id="btn-click" class="btn btn-primary" onclick="SumarPedido(${p.id})">Añadir al pedido</button>
                 </div>
             </div>
             </div>
+
             `
             
             tienda.innerHTML += productoHTML;
@@ -67,25 +66,21 @@ function RenderizarBebida(){
     let value=BBDD.filter(function(tipo){
         return (tipo.codigo==='B');
     });
-
-
+    tienda.innerHTML='<h1>Menu de Bebidas</h1>';
         value.forEach((p)=>{
-            
             let productoHTML = `
-    
-            <div class="col-12 col-md-4 mb-5 d-flex justify-content-center">
-            <div class="card text-dark" style="width: 18rem;">
-            <img class="card-img-top" src="${p.img}" alt="Imagen Bebida">
-                <div class="card-body">
-                    <h5 class="card-title">${p.nombre}</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <p>${p.precio}$</p>
-                    <button id="btn-click" class="btn btn-primary"  onclick="SumarPedido(${p.id})">Añadir al pedido</button>
+                <div class="col-12 col-md-4 mb-5 d-flex justify-content-center">
+                <div class="card text-dark" style="width: 18rem;">
+                <img class="imagen" src="${p.img}" alt="Imagen Bebida">
+                    <div class="card-body">
+                        <h5 class="card-title">${p.nombre}</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <p>${p.precio}$</p>
+                        <button id="btn-click" class="btn btn-primary"  onclick="SumarPedido(${p.id})">Añadir al pedido</button>
+                    </div>
                 </div>
-            </div>
-            </div>
-            `
-            
+                </div>
+                `
             tienda.innerHTML += productoHTML;
         });
 }
@@ -101,14 +96,12 @@ function RenderizarPostre(){
     let value=BBDD.filter(function(tipo){
         return (tipo.codigo==='P');
     });
-
+    tienda.innerHTML='<h1>Menu de Postres</h1>';
         value.forEach((p)=>{
-            
             let productoHTML = `
-    
             <div class="col-12 col-md-4 mb-5 d-flex justify-content-center">
             <div class="card text-dark" style="width: 18rem;">
-            <img class="card-img-top" src="${p.img}" alt="Imagen postre">
+            <img class="imagen" src="${p.img}" alt="Imagen postre">
                 <div class="card-body">
                     <h5 class="card-title">${p.nombre}</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -126,10 +119,8 @@ function RenderizarPostre(){
 
 function RenderizaPedido(){
     let pedido = document.querySelector('#pedido');    
-    let pedidoHtml =' ';
-
-        pedidototal.forEach((p, id)=>{
-            
+        let pedidoHtml =' ';
+        pedidototal.forEach((p, id)=>{  
             pedidoHtml += `
     
             <div class="col-12 col-md-4 mb-5 d-flex justify-content-center">
@@ -147,10 +138,10 @@ function RenderizaPedido(){
             
             
     })
+
     pedido.innerHTML = pedidoHtml;
     GuardarPedido();
 }
-
 
 //Suma y resta del pedido
 
@@ -170,8 +161,6 @@ function SumarPedido(id){
     CalcularPrecioFinal();
 
 }
-
-
 
 const agregar= document.getElementById('tienda')
 agregar.addEventListener('click',()=>{
@@ -202,13 +191,15 @@ const finalizar=document.getElementById('finalizarPedido')
 //Guarda el pedido en el storage
 function GuardarPedido(){
     for(pedido of pedidototal){
-        GuardarStorage(pedido.nombre , JSON.stringify(pedido))
+        GuardarStorage('pedido' , JSON.stringify(pedido))
     }
 };
 
-const GuardarStorage= (clave, valor) =>{
-    localStorage.setItem(clave,valor);
+const GuardarStorage= (nombre, datos) =>{
+    localStorage.setItem(nombre,datos);
 }
+
+
 
 //borra el storage 
 
@@ -241,3 +232,7 @@ function CalcularPrecioFinal(){
     const t = document.getElementById('total');
     t.innerHTML = `<h5>El total del pedido es: $${acu}</h5>`;
 }
+
+
+
+
