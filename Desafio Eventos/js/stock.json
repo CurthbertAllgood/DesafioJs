@@ -4,6 +4,7 @@
         "codigo":"C",
         "nombre": "Pizza",
         "img": "/assets/img/pizza.png",
+        "descripcion":"pizza de muzarella",
         "precio": 150,
         "cantidad":1
     },
@@ -12,6 +13,7 @@
         "codigo":"C",
         "nombre": "sushi",
         "img": "/assets/img/sushi.png",
+        "descripcion":"Sushi con salmon piola",
         "precio": 200,
         "cantidad":1
     },
@@ -20,6 +22,7 @@
         "id": 3,
         "codigo":"B",
         "nombre": "Caipi",
+        "descripcion":"Cachasha con lima y hielo",
         "img": "/assets/img/Caipi.png",
         "precio": 50,
         "cantidad":1
@@ -29,6 +32,7 @@
         "codigo":"B",
         "nombre": "Cuba Libre",
         "img": "/assets/img/CubaLibre.png",
+        "descripcion":"Coca cola y Ron Capitan Morgan con una rodaja de lima y hielo",
         "precio": 60,
         "cantidad":1
     },
@@ -38,6 +42,7 @@
         "codigo":"P",
         "nombre": "Helado",
         "img": "/assets/img/Helado.png",
+        "descripcion":"helado de chocolate y frutilla",
         "precio": 30,
         "cantidad":1
     },
@@ -47,6 +52,7 @@
         "codigo":"P",
         "nombre": "flan",
         "img": "/assets/img/flan.png",
+        "descripcion":"flan bañado con dulce de leche",
         "precio": 35,
         "cantidad":1
     }
