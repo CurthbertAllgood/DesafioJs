@@ -2,6 +2,8 @@
 const pedidototal=[];
 
 window.addEventListener("DOMContentLoaded",()=>{
+    alert("holaa");
+    
     if(localStorage.getItem('pedido')){
         pedidototal=JSON.parse(localStorage.getItem('pedido'));
         RenderizaPedido();
@@ -120,20 +122,16 @@ function RenderizarPostre(){
 function RenderizaPedido(){
     let pedido = document.querySelector('#pedido');    
         let pedidoHtml =' ';
-        pedidototal.forEach((p, id)=>{  
+            pedidototal.forEach((p, id)=>{  
             pedidoHtml += `
-    
-            <div class="col-12 col-md-4 mb-5 d-flex justify-content-center">
-            <div class="card text-dark" style="width: 18rem;">
-                <img class="card-img-top" src="${p.img}" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">${p.nombre}</h5>
-                    <p>${p.precio}$</p>
-                    <p>Cantidad: ${p.cantidad}</p>
-                    <button class="btn btn-danger" onclick="RestarPedido(${id})">Eliminar</button>
-                </div>
-            </div>
-            </div>
+            <table class="tabla">
+            <th scope="col">ID: ${p.id}</th>
+            <th scope="col">Nombre: ${p.nombre}</th>
+            <th scope="col">Cantidad: ${p.cantidad}</th>
+            <th scope="col">Precio:$${p.precio}</th>
+            <th scope="col">
+                <button class="btn btn-danger" onclick="RestarPedido(${id})">Eliminar</button>
+            </th>
             `
             
             
@@ -191,7 +189,7 @@ const finalizar=document.getElementById('finalizarPedido')
 //Guarda el pedido en el storage
 function GuardarPedido(){
     for(pedido of pedidototal){
-        GuardarStorage('pedido' , JSON.stringify(pedido))
+        GuardarStorage(pedido.nombre , JSON.stringify(pedido))
     }
 };
 

@@ -82,6 +82,20 @@ h1{
     font-family: sans-serif;
 }
 
+th  {
+    border-color: aliceblue;
+    color: aliceblue;
+    align-items: center;
+    text-align: center;
+    width: 100px;
+    height: 50px;
+    }
+
+.tabla{
+    border-collapse: collapse;
+}
+
+
 body{
     background-image: linear-gradient(black,gray);
 }
